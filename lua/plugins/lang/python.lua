@@ -36,6 +36,9 @@ return {
   {
     "mfussenegger/nvim-dap-python",
     dependencies = { "mfussenegger/nvim-dap" },
+    config = function()
+      require("plugins.dap.adapters.dap_python")
+    end,
     keys = function()
       local dap_python = require("dap-python")
       -- stylua: ignore
