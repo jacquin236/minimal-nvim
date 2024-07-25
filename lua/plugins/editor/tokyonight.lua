@@ -10,5 +10,9 @@ return {
       comments = { italic = true },
       keywords = { italic = true },
     },
+    on_highlights = function(hl, c)
+      hl.WhichKey = { fg = c.green }
+      hl.WhichKeyDesc = { fg = c.magenta }
+    end,
   },
 }

@@ -14,10 +14,9 @@ return {
   { import = "lazyvim.plugins.extras.lang.toml" },
   { import = "lazyvim.plugins.extras.lang.typescript" },
   { import = "lazyvim.plugins.extras.lang.yaml" },
-  -- debug/test
-  { import = "lazyvim.plugins.extras.dap.core" },
-  { import = "lazyvim.plugins.extras.dap.nlua" },
+
   { import = "lazyvim.plugins.extras.test.core" },
+  { import = "lazyvim.plugins.extras.dap.nlua" },
   -- util
   { import = "lazyvim.plugins.extras.util.mini-hipatterns" },
   { import = "lazyvim.plugins.extras.util.project" },

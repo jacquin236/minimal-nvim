@@ -34,23 +34,6 @@ return {
     },
   },
   {
-    "mfussenegger/nvim-dap-python",
-    dependencies = { "mfussenegger/nvim-dap" },
-    config = function()
-      require("plugins.dap.adapters.dap_python")
-    end,
-    keys = function()
-      local dap_python = require("dap-python")
-      -- stylua: ignore
-      return {
-        { "<leader>dPt", false },
-        { "<leader>dPm", function() dap_python.test_method() end, desc = "Debug Method", ft = "python" },
-        { "<leader>dPc", function() dap_python.test_class() end, desc = "Debug Class", ft = "python" },
-        { "<leader>dPs", function() dap_python.debug_selection() end, desc = "Debug Selection", ft = "python" },
-      }
-    end,
-  },
-  {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {

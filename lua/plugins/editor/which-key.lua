@@ -21,7 +21,7 @@ return {
         { "<leader>f", group = "file/find", icon = "󰈞" },
         { "<leader><tab>", group = "tabs" },
         { "<leader>r", group = "refactor", icon = " " },
-        { "<leader>o", group = "overseer", icon = " " },
+        { "<leader>o", group = "overseer", icon = "󰑮 " },
       },
       layout = {
         width = { min = 20, max = 40 },

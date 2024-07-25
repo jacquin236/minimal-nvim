@@ -7,6 +7,10 @@ return {
       "nvim-lua/plenary.nvim",
       "neovim/nvim-lspconfig",
     },
+    event = {
+      "BufReadPre *.ts,*.tsx,*.js,*.jsx",
+      "BufNewFile *.ts,*.tsx,*.js,*.jqx",
+    },
     opts = {
       on_attach = function(_, bufnr)
         local map = vim.keymap.set
