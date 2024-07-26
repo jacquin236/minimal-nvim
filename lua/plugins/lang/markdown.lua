@@ -58,27 +58,31 @@ return {
     },
   },
   {
-    "iamcco/markdown-preview.nvim",
-    ft = { "markdown" },
-    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    build = "cd app && npm install",
-    keys = {
-      "<leader>cM",
-      "<cmd>MarkdownPreviewToggle<cr>",
-      ft = "markdown",
-      desc = "Markdown Preview",
+    "wallpants/github-preview.nvim",
+    cmd = {
+      "GithubPreviewToggle",
+      "GithubPreviewStart",
     },
-    config = function()
-      vim.cmd([[do FileType]])
+    keys = { "<leader>mp", "<cmd>GithubPreviewToggle<cr>", desc = "Toggle GithubPreview", silent = true },
+    opts = {
+      cursor_line = { disable = true },
+    },
+  },
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    ft = { "markdown" },
+    build = function()
+      require("lazy").load({ plugins = { "markdown-preview.nvim" } })
+      vim.fn["mkdp#util#install"]()
     end,
-    init = function()
-      vim.g.mkdp_filetypes = { "markdown" }
-      vim.g.mkdp_auto_close = true
-      vim.g.mkdp_open_to_the_world = false
-      vim.g.mkdp_open_ip = "127.0.0.1"
-      vim.g.mkdp_echo_preview_url = true
-      vim.g.mkdp_page_title = "${name}"
-      vim.g.mkdp_browser = "/usr/bin/firefox"
-    end,
+  },
+  {
+    "folke/which-key.nvim",
+    opts = {
+      spec = {
+        { "<leader>m", group = "markdown", icon = " " },
+      },
+    },
   },
 }

@@ -27,7 +27,7 @@ return {
           codeium = "(Codeium)",
           copilot = "(Copilot)",
           orgmode = "(Org)",
-          norg = "(Norg)",
+          neorg = "(Neorg)",
           luasnip = "(Snippet)",
           snippets = "(Snippet)",
           git = "(Git)",
