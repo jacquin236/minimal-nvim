@@ -66,7 +66,7 @@ vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
 vim.opt.undolevels = 10000
 vim.opt.swapfile = false
 
--- Backspace
 vim.opt.backspace = { "start", "eol", "indent" }
-
 vim.opt.path:append("**")
+vim.opt.list = true
+vim.opt.listchars = "nbsp:⦸,tab:▷┅,extends:»,precedes:«,trail:•"
