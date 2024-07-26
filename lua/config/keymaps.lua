@@ -93,3 +93,31 @@ map("n", "<localleader>wv", "<C-W>t <C-W>H", { desc = "Vertical   Horizontal 
 map("n", "<c-w>f", "<C-W>vgf", { desc = "Open File in Vert Split" })
 map("n", "<localleader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 map("n", "<localleader>wq", "<cmd>bd!<cr>", { desc = "Close Current Buffer and Window" })
+
+--------------------------------------------- LazyGit -----------------------------------------
+map_del("n", "<leader>gg")
+map_del("n", "<leader>gG")
+map_del("n", "<leader>gb")
+map_del("n", "<leader>gf")
+map_del("n", "<leader>gL")
+
+-- stylua: ignore start
+map("n", "<leader>gl", "", { desc = "LazyGit" })
+map("n", "<leader>glg", function() LazyVim.lazygit( { cwd = LazyVim.root.git() }) end, { desc = "Lazygit (Root Dir)" })
+map("n", "<leader>glG", function() LazyVim.lazygit() end, { desc = "Lazygit (cwd)" })
+map("n", "<leader>glb", LazyVim.lazygit.blame_line, { desc = "Git Blame Line" })
+map("n", "<leader>glB", LazyVim.lazygit.browse, { desc = "Git Browse" })
+
+map("n", "<leader>glf", function()
+  local git_path = vim.api.nvim_buf_get_name(0)
+  LazyVim.lazygit({args = { "-f", vim.trim(git_path) }})
+end, { desc = "Lazygit Current File History" })
+
+map("n", "<leader>gll", function()
+  LazyVim.lazygit({ args = { "log" }, cwd = LazyVim.root.git() })
+end, { desc = "Lazygit Log" })
+
+map("n", "<leader>glL", function()
+  LazyVim.lazygit({ args = { "log" } })
+end, { desc = "Lazygit Log (cwd)" })
+-- stylua: ignore end

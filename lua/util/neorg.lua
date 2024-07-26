@@ -104,8 +104,8 @@ local keybinds = function()
 
   -- stylua: ignore
   return {
-    { "[h", function() goto_headline("previous") end, desc = "Previous Headline (norg)" },
-    { "]h", function() goto_headline("next") end, desc = "Next Headline (norg)" },
+    { "[L", function() goto_headline("previous") end, desc = "Previous Headline (norg)" },
+    { "]L", function() goto_headline("next") end, desc = "Next Headline (norg)" },
     
     { prefix .. "o", "<cmd>Neorg<cr>", desc = "Options" },
     { prefix .. "q", "<cmd>Neorg return<cr>", desc = "Return" },

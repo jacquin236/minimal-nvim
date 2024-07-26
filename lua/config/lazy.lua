@@ -20,6 +20,7 @@ require("lazy").setup({
     { import = "plugins" },
     { import = "plugins.lang" },
     { import = "plugins.editor" },
+    { import = "plugins.git" },
   },
   defaults = {
     lazy = true,
