@@ -12,6 +12,7 @@ return {
           text = "  NEO-TREE EXPLORER",
           highlight = "PanelHeading",
           text_align = "left",
+          separator = true,
         },
       }
       opts.options.color_icons = true
@@ -22,6 +23,14 @@ return {
         items = {
           require("bufferline").groups.builtin.pinned:with({ icon = "" }),
           require("bufferline").groups.builtin.ungrouped,
+          -- stylua: ignore
+          {
+            name = "dependencies",
+            icon = "",
+            matcher = function(buf)
+              return vim.startswith(buf.path, vim.env.VIMRUNTIME)
+            end,
+          },
           {
             name = "doc",
             matcher = function(buf)
