@@ -30,6 +30,7 @@ return {
       spec = {
         { "<leader>p", group = "packages/dependencies", icon = " ", mode = { "n", "v" } },
         { "<leader>pp", group = "python: requirements.txt", icon = " " },
+        { "<localleader>v", group = "VirtualEnv (python)", icon = " " },
       },
     },
   },
@@ -84,5 +85,69 @@ return {
         },
       },
     },
+  },
+  {
+    "linux-cultist/venv-selector.nvim",
+    dependencies = {
+      "neovim/nvim-lspconfig",
+      "mfussenegger/nvim-dap",
+      "mfussenegger/nvim-dap-python",
+      "nvim-telescope/telescope.nvim",
+    },
+    lazy = false,
+    branch = "regexp",
+    config = function()
+      local function shorter_name(filename)
+        return filename:gsub(os.getenv("HOME"), "~"):gsub("/bin/python", "")
+      end
+
+      local function on_venv_activate()
+        local command_run = false
+
+        local function run_shell_command()
+          local source = require("venv-selector").source()
+          local python = require("venv-selector").python()
+
+          if source == "poetry" and command_run == false then
+            local command = "poetry env use " .. python
+            vim.api.nvim_feedkeys(command .. "\n", "n", false)
+            command_run = true
+          end
+        end
+
+        vim.api.nvim_create_augroup("TerminalCommands", { clear = true })
+
+        vim.api.nvim_create_autocmd("TermEnter", {
+          group = "TerminalCommands",
+          pattern = "*",
+          callback = run_shell_command,
+        })
+      end
+
+      require("venv-selector").setup({
+        settings = {
+          options = {
+            on_telescope_result_callback = shorter_name,
+            on_venv_activate_callback = on_venv_activate,
+            notify_user_on_venv_activation = true,
+          },
+        },
+      })
+    end,
+    keys = function()
+      local vprefix = "<localleader>v"
+      local venv = require("venv-selector")
+      -- stylua: ignore
+      return {
+        { vprefix .. "p", function() venv.python() end, desc = "Path to Python or nil" },
+        { vprefix .. "v", function() venv.venv() end, desc = "Path to Venv or nil" },
+        { vprefix .. "s", function() venv.source() end, desc = "Source name of venv" },
+        { vprefix .. "w", function() venv.workspace_paths() end, desc = "Workspace paths" },
+        { vprefix .. "c", function() venv.cwd() end, desc = "Current working dir" },
+        { vprefix .. "f", function() venv.file_dir() end, desc = "Current file dir" },
+        { vprefix .. "d", function() venv.deactivate() end, desc = "Deactivate venv" },
+        { vprefix .. "S", function() venv.stop_lsp_servers() end, desc = "Stop lsp server" },
+      }
+    end,
   },
 }
