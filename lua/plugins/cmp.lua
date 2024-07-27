@@ -11,12 +11,35 @@ return {
       "hrsh7th/cmp-nvim-lua",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
+      "hrsh7th/cmp-calc",
+      "hrsh7th/cmp-emoji",
       "ray-x/cmp-treesitter",
       "hrsh7th/cmp-cmdline",
       "dmitmel/cmp-cmdline-history",
       "f3fora/cmp-spell",
       "rafamadriz/friendly-snippets",
       { "garymjr/nvim-snippets", opts = { friendly_snippets = true } },
+      {
+        "uga-rosa/cmp-dictionary",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        opts = {
+          paths = completion.dictionary_find(),
+          first_case_insensitive = true,
+          exact_length = 2,
+          document = { enable = false },
+        },
+      },
+      {
+        "Gelio/cmp-natdat",
+        ft = { "norg", "org", "markdown" },
+        opts = { cmp_kind_text = "NatDat" },
+        config = function(_, opts)
+          require("cmp_natdat").setup(opts)
+          require("lspkind").init({
+            symbol_map = { NatDat = "🗓️" },
+          })
+        end,
+      },
     },
     keys = {
       { "<leader>iC", "<cmd>CmpStatus<cr>", desc = "Cmp" },
@@ -26,6 +49,7 @@ return {
       opts.window = completion.window
       opts.formatting = completion.formatting
       opts.performance = completion.performance
+      opts.sorting = completion.sorting
     end,
     config = function(_, opts)
       local cmp = require("cmp")
@@ -43,6 +67,7 @@ return {
         sources = cmp.config.sources({
           { name = "cmdline" },
           { name = "cmdline_history" },
+          { name = "path" },
         }),
       })
     end,

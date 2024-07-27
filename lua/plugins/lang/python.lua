@@ -150,4 +150,13 @@ return {
       }
     end,
   },
+  {
+    "mfussenegger/nvim-dap-python",
+    config = function()
+      local debugpy_path = require("mason-registry").get_package("debugpy"):get_install_path()
+      local dap_python = require("dap-python")
+      dap_python.setup(debugpy_path .. "/venv/bin/python")
+      dap_python.test_runner = "pytest"
+    end,
+  },
 }

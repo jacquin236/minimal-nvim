@@ -47,7 +47,6 @@ return {
   },
   {
     "hrsh7th/nvim-cmp",
-    dependencies = { "hrsh7th/cmp-emoji" },
     config = function(_, opts)
       local cmp = require("cmp")
       cmp.setup(opts)
@@ -58,6 +57,7 @@ return {
           { name = "dictionary", group_index = 1 },
           { name = "spell", group_index = 1 },
           { name = "emoji", group_index = 1 },
+          { name = "natdat", group_index = 1 },
           { name = "buffer", group_index = 2 },
         },
       })

@@ -24,6 +24,8 @@ local formatting = {
         nvim_lua = "(Lua)",
         spell = "(Spell)",
         treesitter = "(Treesitter)",
+        dictionary = "(Dict)",
+        calc = "(Calc)",
       }, {
         __index = function()
           return "(Builtin)"
@@ -72,19 +74,93 @@ local sources = {
   { name = "lazydev", group_index = 0 },
   { name = "nvim_lsp" },
   { name = "nvim_lsp_signature_help" },
+  { name = "snippets" },
   { name = "nvim_lua" },
   { name = "treesitter" },
-  { name = "path" },
-  { name = "snippets" },
   {
-    name = "buffer",
-    options = {
-      get_bufnrs = function()
-        return vim.api.nvim_list_bufs()
+    name = "path",
+    option = {
+      get_cwd = function(params)
+        return { vim.fn.expand(("#%d:p:h"):format(params.context.bufnr)), vim.fn.getcwd() }
       end,
     },
-    group_index = 2,
   },
+  {
+    name = "buffer",
+    option = {
+      keyword_length = 3,
+      get_bufnrs = function() -- from all buffers (less than 1MB)
+        local bufs = {}
+        for _, bufn in ipairs(vim.api.nvim_list_bufs()) do
+          local buf_size = vim.api.nvim_buf_get_offset(bufn, vim.api.nvim_buf_line_count(bufn))
+          if buf_size < 10 * 1024 then
+            table.insert(bufs, bufn)
+          end
+        end
+        return bufs
+      end,
+    },
+  },
+  { name = "calc" },
+}
+
+local dictionary_find = function()
+  local dict_sources = {}
+  local default = "/usr/share/dict/words"
+  if vim.uv.fs_stat(default) then
+    table.insert(dict_sources, default)
+  end
+  for filepath in vim.fn.glob(vim.fn.stdpath("config") .. "/spell/*.add"):gmatch("[^\n]+") do
+    table.insert(dict_sources, filepath)
+  end
+  return dict_sources
+end
+
+local compare = require("cmp.config.compare")
+local types = require("cmp.types")
+---@type table<integer, integer>
+local modified_priority = {
+  [types.lsp.CompletionItemKind.Variable] = types.lsp.CompletionItemKind.Method,
+  [types.lsp.CompletionItemKind.Snippet] = 0, -- top
+  [types.lsp.CompletionItemKind.Keyword] = 0, -- top
+  [types.lsp.CompletionItemKind.Text] = 100, -- bottom
+}
+---@param kind integer: kind of completion entry
+local function modified_kind(kind)
+  return modified_priority[kind] or kind
+end
+
+local sorting = {
+  -- https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/config/compare.lua
+  comparators = {
+    compare.offset,
+    compare.exact,
+    compare.recently_used, ---@diagnostic disable-line
+    function(entry1, entry2) -- sort by compare kind (Variable, Function etc)
+      local kind1 = modified_kind(entry1:get_kind())
+      local kind2 = modified_kind(entry2:get_kind())
+      if kind1 ~= kind2 then
+        return kind1 - kind2 < 0
+      end
+    end,
+    function(entry1, entry2) -- sort by length ignoring "=~"
+      local len1 = string.len(string.gsub(entry1.completion_item.label, "[=~()_]", ""))
+      local len2 = string.len(string.gsub(entry2.completion_item.label, "[=~()_]", ""))
+      if len1 ~= len2 then
+        return len1 - len2 < 0
+      end
+    end,
+    function(entry1, entry2) -- score by lsp, if available
+      local t1 = entry1.completion_item.sortText
+      local t2 = entry2.completion_item.sortText
+      if t1 ~= nil and t2 ~= nil and t1 ~= t2 then
+        return t1 < t2
+      end
+    end,
+    compare.score,
+    compare.order,
+  },
+  priority_weight = 2,
 }
 
 return {
@@ -92,4 +168,6 @@ return {
   performance = performance,
   window = window,
   sources = sources,
+  dictionary_find = dictionary_find,
+  sorting = sorting,
 }
