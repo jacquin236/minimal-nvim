@@ -4,6 +4,7 @@ vim.g.lazyvim_python_lsp = "pyright"
 vim.g.lazyvim_python_ruff = "ruff"
 
 return {
+  { "Vimjas/vim-python-pep8-indent", ft = { "python" } },
   {
     "MeanderingProgrammer/py-requirements.nvim",
     event = { "BufRead requirements.txt" },
