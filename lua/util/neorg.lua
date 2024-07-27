@@ -134,19 +134,6 @@ local keybinds = function()
     { lprefix .. "p", "<Plug>(neorg.qol.todo-items.todo.task-pending)", desc = "Task Pending" },
     { lprefix .. "r", "<Plug>(neorg.qol.todo-items.todo.tesk-recurring)", desc = "Task Recurring" },
     { lprefix .. "u", "<Plug>(neorg.qol.todo-items.todo.task-undone)", desc = "Task Undone" },
-
-    {
-      lprefix .. "e", function()
-        vim.cmd([[!norgc '%' gfm >/dev/null]])
-      end, desc = "Export Markdown & Open"
-    },
-    {
-      lprefix .. "E", function()
-        vim.cmd([[!norgc '%' gfm >/dev/null]])
-        vim.cmd.vsplit(vim.fn.fnameescape(vim.fn.expand("%:p:.:r") .. ".md"))
-        vim.cmd([[GithubPreviewStart]])
-      end, desc = "Export Markdown & MarkdownPreview"
-    },
   }
 end
 
