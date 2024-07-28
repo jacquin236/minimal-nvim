@@ -123,7 +123,7 @@ end, { desc = "Lazygit Log (cwd)" })
 -- stylua: ignore end
 
 ---------------------------------------------- Terminal ------------------------------------------
--- Reference: https://vi.stackexchange.com/questions/21260/how-to-clear-neovim-terminal-buffer#:~:text=tmap%20%3Cc-w%3E%3Cc-l%3E%20%3Cc-%3E%3Cc-n%3E%3Cc-w%3E%3Cc-l%3Ei%3Cc-l%3E%20This%20will%20%22clear%22%20the%20buffer%2C,sleep%2C%20which%20is%20required%20for%20it%20to%20work.
+-- https://vi.stackexchange.com/questions/21260/how-to-clear-neovim-terminal-buffer
 
 local clear_term = function(reset)
   vim.opt_local.scrollback = 1
