@@ -31,9 +31,29 @@ return {
     end,
   },
   {
+    "nvim-treesitter/nvim-treesitter-context",
+    event = "VeryLazy",
+    init = function()
+      vim.api.nvim_set_hl(0, "TreesitterContextSeparator", { link = "Dim" })
+      vim.api.nvim_set_hl(0, "TreesitterContext", { link = "Normal" })
+      vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { link = "LineNr" })
+    end,
+    opts = {
+      multiline_threshold = 4,
+      separator = "─",
+      mode = "cursor",
+    },
+  },
+  {
     "chrisgrieser/nvim-various-textobjs",
     keys = ts.treesitter_various_text_objs_keys,
     opts = { useDefaultKeymaps = false },
+  },
+  {
+    "windwp/nvim-ts-autotag",
+    event = "LazyFile",
+    ft = { "typescriptreact", "javascript", "javascriptreact", "html", "vue", "svelte" },
+    opts = {},
   },
   {
     "vidocqh/auto-indent.nvim",

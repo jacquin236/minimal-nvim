@@ -121,3 +121,23 @@ map("n", "<leader>glL", function()
   LazyVim.lazygit({ args = { "log" } })
 end, { desc = "Lazygit Log (cwd)" })
 -- stylua: ignore end
+
+---------------------------------------------- Terminal ------------------------------------------
+-- Reference: https://vi.stackexchange.com/questions/21260/how-to-clear-neovim-terminal-buffer#:~:text=tmap%20%3Cc-w%3E%3Cc-l%3E%20%3Cc-%3E%3Cc-n%3E%3Cc-w%3E%3Cc-l%3Ei%3Cc-l%3E%20This%20will%20%22clear%22%20the%20buffer%2C,sleep%2C%20which%20is%20required%20for%20it%20to%20work.
+
+local clear_term = function(reset)
+  vim.opt_local.scrollback = 1
+
+  vim.api.nvim_command("startinsert")
+  if reset == 1 then
+    vim.api.nvim_feedkeys("reset", "t", false)
+  else
+    vim.api.nvim_feedkeys("clear", "t", false)
+  end
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<cr>", true, false, true), "t", true)
+  vim.opt_local.scrollback = 10000
+end
+-- stylua: ignore start
+map("t", "<C-l>", function() clear_term(0) end, { desc = "Clear Terminal", silent = true })
+map("t", "<C-l><C-l>", function() clear_term(1) end, { desc = "Clear Terminal", silent = true })
+-- stylua: ignore end

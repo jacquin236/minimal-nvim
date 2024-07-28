@@ -61,29 +61,44 @@ local treesitter_textobjs = function()
   return {
     incremental_selection = {
       enable = enable,
+      disable = { "help" },
       keymaps = {
         init_selection = "<C-space>",
         node_incremental = "<C-space>",
         scope_incremental = false,
-        node_decremental = "v",
+        node_decremental = "<C-CR>",
       },
     },
-    textobjects = { lsp_interop = { enable = false } },
-    move = {
-      enable = enable,
-      set_jumps = enable,
-      -- Keeps LazyVim default keymaps
-      goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["]a"] = "@parameter.inner" },
-      goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]A"] = "@parameter.inner" },
-      goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer", ["[a"] = "@parameter.inner" },
-      goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer", ["[A"] = "@parameter.inner" },
-    },
-    select = {
-      enable = enable,
-      keymaps = {
-        ["ix"] = "@cell.inner",
-        ["ax"] = "@cell.outer", -- Cell Repl for python
+    textobjects = {
+      lsp_interop = { enable = false },
+      move = {
+        enable = enable,
+        set_jumps = enable,
+        -- Keeps LazyVim default keymaps
+        goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["]a"] = "@parameter.inner" },
+        goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]A"] = "@parameter.inner" },
+        goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer", ["[a"] = "@parameter.inner" },
+        goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer", ["[A"] = "@parameter.inner" },
       },
+      select = {
+        enable = enable,
+        include_surrounding_whitespace = true,
+        keymaps = {
+          ["af"] = { query = "@function.outer", desc = "Function" },
+          ["if"] = { query = "@function.inner", desc = "Function" },
+          ["ac"] = { query = "@conditional.outer", desc = "Conditional" },
+          ["ic"] = { query = "@conditional.inner", desc = "Conditional" },
+          ["aL"] = { query = "@assignment.lhs", desc = "Assignment lhs" },
+          ["aR"] = { query = "@assignment.rhs", desc = "Assignment rhs" },
+          ["ax"] = { query = "@cell.outer", desc = "Cell Repl" }, -- Cell Repl for python
+          ["ix"] = { query = "@cell.inner", desc = "Cell Repl" },
+        },
+      },
+    },
+    query_linter = {
+      enable = enable,
+      use_virtual_text = true,
+      lint_events = { "BufWrite", "CursorHold" },
     },
   }
 end

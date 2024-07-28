@@ -85,4 +85,17 @@ return {
       },
     },
   },
+  {
+    "akinsho/bufferline.nvim",
+    opts = function(_, opts)
+      table.insert(opts.options.offsets, 3, {
+        {
+          text = "󰆼 DATABASE VIEWER",
+          filetype = "dbui",
+          highlight = "PanelHeading",
+          separator = true,
+        },
+      })
+    end,
+  },
 }
