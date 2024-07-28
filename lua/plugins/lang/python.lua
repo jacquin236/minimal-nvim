@@ -97,44 +97,6 @@ return {
     },
     lazy = false,
     branch = "regexp",
-    config = function()
-      local function shorter_name(filename)
-        return filename:gsub(os.getenv("HOME"), "~"):gsub("/bin/python", "")
-      end
-
-      local function on_venv_activate()
-        local command_run = false
-
-        local function run_shell_command()
-          local source = require("venv-selector").source()
-          local python = require("venv-selector").python()
-
-          if source == "poetry" and command_run == false then
-            local command = "poetry env use " .. python
-            vim.api.nvim_feedkeys(command .. "\n", "n", false)
-            command_run = true
-          end
-        end
-
-        vim.api.nvim_create_augroup("TerminalCommands", { clear = true })
-
-        vim.api.nvim_create_autocmd("TermEnter", {
-          group = "TerminalCommands",
-          pattern = "*",
-          callback = run_shell_command,
-        })
-      end
-
-      require("venv-selector").setup({
-        settings = {
-          options = {
-            on_telescope_result_callback = shorter_name,
-            on_venv_activate_callback = on_venv_activate,
-            notify_user_on_venv_activation = true,
-          },
-        },
-      })
-    end,
     keys = function()
       local vprefix = "<localleader>v"
       local venv = require("venv-selector")
@@ -154,10 +116,47 @@ return {
   {
     "mfussenegger/nvim-dap-python",
     config = function()
-      local debugpy_path = require("mason-registry").get_package("debugpy"):get_install_path()
       local dap_python = require("dap-python")
-      dap_python.setup(debugpy_path .. "/venv/bin/python")
+      local dap = require("dap")
+      dap_python.setup("python")
       dap_python.test_runner = "pytest"
+
+      table.insert(dap.configurations.python, {
+        {
+          name = "Python Debugger: Flask",
+          type = "debugpy",
+          request = "launch",
+          module = "flask",
+          env = {
+            FLASK_APP = "app.py",
+            FLASK_ENV = "development",
+          },
+          args = { "run" },
+          jinja = true,
+        },
+        {
+          name = "Python Debugger: Django",
+          type = "debugpy",
+          request = "launch",
+          program = "${file}",
+          console = "integratedTerminal",
+          django = true,
+          justMyCode = true,
+          args = { "--port", "5000" },
+          autoReload = { enable = true },
+        },
+        {
+          name = "Python Debugger: Attach Process",
+          type = "debugpy",
+          request = "attach",
+          processId = require("dap.utils").pick_process,
+          connect = {
+            host = "localhost",
+            port = 5678,
+          },
+          pathMappings = { localRoot = "${workspaceFolder}" },
+        },
+      })
     end,
   },
 }

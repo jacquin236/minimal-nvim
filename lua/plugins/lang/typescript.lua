@@ -1,37 +1,59 @@
 return {
-  { "dmmulroy/ts-error-translator.nvim", opts = {} },
+  {
+    "dmmulroy/ts-error-translator.nvim",
+    ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+    opts = {},
+  },
+  {
+    "dmmulroy/tsc.nvim",
+    ft = { "typescriptreact", "typescript" },
+    cmd = { "TSC", "TSCOpen", "TSCClose", "TSStop" },
+    opts = {
+      use_trouble_qflist = true,
+    },
+    keys = {
+      { "<leader>ct", ft = { "typescriptreact", "typescript" }, "<cmd>TSC<cr>", desc = "Type Check" },
+      { "<leader>xy", ft = { "typescriptreact", "typescript" }, "<cmd>TSCOpen<cr>", desc = "Type Check Quickfix" },
+    },
+  },
   {
     "pmizio/typescript-tools.nvim",
     lazy = false,
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "neovim/nvim-lspconfig",
-    },
-    event = {
-      "BufReadPre *.ts,*.tsx,*.js,*.jsx",
-      "BufNewFile *.ts,*.tsx,*.js,*.jqx",
-    },
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
     opts = {
-      on_attach = function(_, bufnr)
-        local map = vim.keymap.set
-
-        -- stylua: ignore start
-        map("n", "gD", "<cmd>TSToolsGoToSourceDefinition<cr>", { desc = "Goto Source Definition", buffer = bufnr })
-        map("n", "gR", "<cmd>TSToolsFileReferences<cr>", { desc = "File References", buffer = bufnr })
-        map("n", "<leader>co", "<cmd>TSToolsOrganizeImports<cr>", { desc = "Organize Imports", buffer = bufnr })
-        map("n", "<leader>cI", "<cmd>TSToolsSortImports<cr>", { desc = "Sort Imports", buffer = bufnr })
-        map("n", "<leader>cM", "<cmd>TSToolsAddMissingImports<cr>", { desc = "Add Missing Imports", buffer = bufnr })
-        map("n", "<leader>cu", "<cmd>TSToolsRemoveUnusedImports<cr>", { desc = "Remove Unused Imports", buffer = bufnr })
-        map("n", "<leader>cU", "<cmd>TSToolsRemoveUnused<cr>", { desc = "Remove Unused Statments", buffer = bufnr })
-        map("n", "<leader>cx", "<cmd>TSToolsFixAll<cr>", { desc = "Fix All Diagnostics", buffer = bufnr })
-        map("n", "<leader>cR", "<cmd>TSToolsRenameFile<cr>", { desc = "Rename File", buffer = bufnr })
-        -- stylua: ignore end
-      end,
       handlers = {
         ["textDocument/publishDiagnostics"] = function(err, result, ctx, config)
           require("ts-error-translator").translate_diagnostics(err, result, ctx, config)
           vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx, config)
         end,
+      },
+      on_attach = function(_, bufnr)
+        local map = vim.keymap.set
+        -- stylua: ignore start
+        map("n", "<leader>co", "<cmd>TSToolsOrganizeImports<cr>", { desc = "Organize Imports", buffer = bufnr })
+        map("n", "<leader>cI", "<cmd>TSToolsSortImports<cr>", { desc = "Sort imports", buffer = bufnr })
+        map("n", "<leader>cu", "<cmd>TSToolsRemoveUnusedImports<cr>", { desc = "Remove unused imports", buffer = bufnr })
+        map("n", "<leader>cU", "<cmd>TSToolsRemoveUnused<cr>", { desc = "Remove unused statements", buffer = bufnr })
+        map("n", "<leader>cM", "<cmd>TSToolsAddMissingImports<cr>", { desc = "Add missing imports", buffer = bufnr })
+        map("n", "<leader>cD", "<cmd>TSToolsFixAll<cr>", { desc = "Fix all diagnostics", buffer = bufnr })
+        map("n", "gD", "<cmd>TSToolsGoToSourceDefinition<cr>", { desc = "Goto Source Definiton", buffer = bufnr })
+        map("n", "gR", "<cmd>TSToolsFileReferences<cr>", { desc = "File References", buffer = bufnr })
+        -- stylua: ignore end
+      end,
+      settings = {
+        tsserver_file_preferences = {
+          includeInlayEnumMemberValueHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayParameterNameHints = "all",
+          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayVariableTypeHints = true,
+          includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+          quotePreference = "auto",
+          disableSuggestions = true,
+        },
+        complete_function_calls = true,
       },
     },
   },
@@ -40,36 +62,38 @@ return {
     opts = {
       servers = {
         vtsls = {
-          handlers = {
-            ["textDocument/publishDiagnostics"] = function(err, result, ctx, config)
-              require("ts-error-translator").translate_diagnostics(err, result, ctx, config)
-              vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx, config)
-            end,
+          filetypes = {
+            "javascript",
+            "javascriptreact",
+            "javascript.jsx",
+            "typescript",
+            "typescriptreact",
+            "typescript.tsx",
           },
-          init_options = {
-            preferences = {
-              disableSuggestions = true,
+          enableMoveToFileCodeAction = true,
+          autoUseWorkspaceTsdk = true,
+          experimental = {
+            completion = { enableServerSideFuzzyMatch = true },
+          },
+          settings = {
+            typescript = {
+              updateImportsOnFileMove = { enabled = "always" },
             },
           },
+          keys = require("util.typescript").vtsls_keys,
         },
+      },
+      setup = {
+        vtsls = require("util.typescript").vtsls_setup,
       },
     },
   },
   {
-    "dmmulroy/tsc.nvim",
-    ft = { "typescript", "typescriptreact" },
-    cmd = { "TSC", "TSCOpen", "TSCClose", "TSStop" },
-    opts = {
-      auto_start_watch_mode = false,
-      use_trouble_qflist = true,
-      auto_open_qflist = true,
-      flags = { watch = false },
-      enable_progress_notifications = true,
-      hide_progress_notifications_from_history = true,
+    "mxsdev/nvim-dap-vscode-js",
+    dependencies = {
+      "mfussenegger/nvim-dap",
+      "microsoft/vscode-js-debug",
     },
-    keys = {
-      { "<leader>ct", ft = { "typescript", "typescriptreact" }, "<cmd>TSC<cr>", desc = "Type Check" },
-      { "<leader>xy", ft = { "typescript", "typescriptreact" }, "<cmd>TSCOpen<cr>", desc = "Type Check Quickfix" },
-    },
+    config = require("util.typescript").ts_debugger,
   },
 }
