@@ -15,7 +15,8 @@ map("n", "<leader>lx", "<cmd>LazyExtras<cr>", { desc = "Lazy Extras" })
 map("n", "<leader>lr", "<cmd>LazyRoot<cr>", { desc = "Lazy Root" })
 map("n", "<leader>lL", function() LazyVim.news.changelog() end, { desc = "LazyVim ChangeLog" })
 map("n", "<leader>ld", function() vim.fn.system({ "xdg-open", "https://lazyvim.org" }) end, { desc = "LazyVim Docs" })
-map("n", "<leader>lR", function() vim.fn.system({ "xdg-open", "https://github.com/LazyVim/LazyVim" }) end, { desc = "LazyVim Repo" })
+map("n", "<leader>lR", function() vim.fn.system({ "xdg-open", "https://github.com/LazyVim/LazyVim" }) end,
+  { desc = "LazyVim Repo" })
 map("n", "<leader>lu", function() lazy.update() end, { desc = "Lazy Update" })
 map("n", "<leader>lc", function() lazy.check() end, { desc = "Lazy Check" })
 map("n", "<leader>ls", function() lazy.sync() end, { desc = "Lazy Sync" })
@@ -103,14 +104,14 @@ map_del("n", "<leader>gL")
 
 -- stylua: ignore start
 map("n", "<leader>gl", "", { desc = "LazyGit" })
-map("n", "<leader>glg", function() LazyVim.lazygit( { cwd = LazyVim.root.git() }) end, { desc = "Lazygit (Root Dir)" })
+map("n", "<leader>glg", function() LazyVim.lazygit({ cwd = LazyVim.root.git() }) end, { desc = "Lazygit (Root Dir)" })
 map("n", "<leader>glG", function() LazyVim.lazygit() end, { desc = "Lazygit (cwd)" })
 map("n", "<leader>glb", LazyVim.lazygit.blame_line, { desc = "Git Blame Line" })
 map("n", "<leader>glB", LazyVim.lazygit.browse, { desc = "Git Browse" })
 
 map("n", "<leader>glf", function()
   local git_path = vim.api.nvim_buf_get_name(0)
-  LazyVim.lazygit({args = { "-f", vim.trim(git_path) }})
+  LazyVim.lazygit({ args = { "-f", vim.trim(git_path) } })
 end, { desc = "Lazygit Current File History" })
 
 map("n", "<leader>gll", function()
@@ -141,3 +142,68 @@ end
 map("t", "<C-l>", function() clear_term(0) end, { desc = "Clear Terminal", silent = true })
 map("t", "<C-l><C-l>", function() clear_term(1) end, { desc = "Clear Terminal", silent = true })
 -- stylua: ignore end
+
+------------------------------------------- Editor -----------------------------------------------
+-- Save without formatting
+map("n", "<a-s>", "<cmd>noautocmd w<cr>", { desc = "Save Without Formatting" })
+-- Spelling
+map("n", "<leader>!", "zg", { desc = "Add Word to Dictionary" })
+map("n", "<leader>@", "zug", { desc = "Remove Word from Dictionary" })
+-- Select
+map({ "n", "x" }, "<C-a>", "gg<S-V>G", { desc = "Select All Text", silent = true, noremap = true })
+-- Paste
+map("i", "<C-v>", '<C-r>"', { desc = "Paste on Insert Mode", silent = true })
+-- Copy
+map({ "n", "x" }, "<C-c>", ":%y+<cr>", { desc = "Copy Whole Text to Clipboard", silent = true })
+
+--------------------------------------------- Tab ---------------------------------------------
+map("n", "]<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
+map("n", "[<tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+map("n", "<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
+map("n", "<s-tab>", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
+for i = 1, 9 do
+  map("n", "<leader><tab>" .. i, "<cmd>tabn " .. i .. "<cr>", { desc = "Tab " .. i })
+end
+map("n", "<leader><tab><tab>", function()
+  vim.ui.select(vim.api.nvim_list_tabpages(), {
+    prompt = "Select Tab:",
+    format_item = function(tabid)
+      local wins = vim.api.nvim_tabpage_list_wins(tabid)
+      local not_floating_win = function(winid)
+        return vim.api.nvim_win_get_config(winid).relative == ""
+      end
+      wins = vim.tbl_filter(not_floating_win, wins)
+      local bufs = {}
+      for _, win in ipairs(wins) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        local buftype = vim.api.nvim_get_option_value("buftype", { buf = buf })
+        if buftype ~= "nofile" then
+          local fname = vim.api.nvim_buf_get_name(buf)
+          table.insert(bufs, vim.fn.fnamemodify(fname, ":t"))
+        end
+      end
+      local tabnr = vim.api.nvim_tabpage_get_number(tabid)
+      local cwd = string.format(" %8s: ", vim.fn.fnamemodify(vim.fn.getcwd(-1, tabnr), ":t"))
+      local is_current = vim.api.nvim_tabpage_get_number(0) == tabnr and "✸" or " "
+      return tabnr .. is_current .. cwd .. table.concat(bufs, ", ")
+    end,
+  }, function(tabid)
+    if tabid ~= nil then
+      vim.cmd(tabid .. "tabnext")
+    end
+  end)
+end, { desc = "Select Tabs" })
+
+--------------------------------------------- Buffer --------------------------------------------
+-- Buffers
+map("n", "<leader>bf", "<cmd>bfirst<cr>", { desc = "First Buffer" })
+map("n", "<leader>ba", "<cmd>blast<cr>", { desc = "Last Buffer" })
+map("n", "<leader>b<tab>", "<cmd>tabnew %<cr>", { desc = "Current Buffer in New Tab" })
+
+----------------------------------------- Windows ------------------------------------------------
+map("n", "<localleader>w", "", { desc = "Windows" })
+map("n", "<localleader>wh", "<C-W>t <C-W>K", { desc = "Horizontal   Vertical Splits" })
+map("n", "<localleader>wv", "<C-W>t <C-W>H", { desc = "Vertical   Horizontal Splits" })
+map("n", "<c-w>f", "<C-W>vgf", { desc = "Open File in Vert Split" })
+map("n", "<localleader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
+map("n", "<localleader>wq", "<cmd>bd!<cr>", { desc = "Close Current Buffer and Window" })
