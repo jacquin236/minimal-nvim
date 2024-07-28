@@ -10,7 +10,8 @@ return {
       "hrsh7th/cmp-nvim-lsp-signature-help",
       "hrsh7th/cmp-nvim-lua",
       "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
+      { "hrsh7th/cmp-path", enabled = false },
+      "https://codeberg.org/FelipeLema/cmp-async-path",
       "hrsh7th/cmp-calc",
       "hrsh7th/cmp-emoji",
       "ray-x/cmp-treesitter",
@@ -58,7 +59,7 @@ return {
       cmp.setup.cmdline({ "/", "?" }, {
         completion = { completeopt = "menu,menuone,noinsert" },
         mapping = cmp.mapping.preset.cmdline(),
-        sources = { { name = "buffer" } },
+        sources = { { name = "buffer" }, { name = "async_path" } },
       })
 
       cmp.setup.cmdline(":", {
@@ -67,7 +68,7 @@ return {
         sources = cmp.config.sources({
           { name = "cmdline" },
           { name = "cmdline_history" },
-          { name = "path" },
+          { name = "async_path" },
         }),
       })
     end,

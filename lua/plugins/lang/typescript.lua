@@ -62,7 +62,10 @@ return {
     opts = {
       auto_start_watch_mode = false,
       use_trouble_qflist = true,
+      auto_open_qflist = true,
       flags = { watch = false },
+      enable_progress_notifications = true,
+      hide_progress_notifications_from_history = true,
     },
     keys = {
       { "<leader>ct", ft = { "typescript", "typescriptreact" }, "<cmd>TSC<cr>", desc = "Type Check" },

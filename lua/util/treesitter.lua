@@ -20,9 +20,12 @@ local treesitter_core = function()
     enable = true
     language_tree = false
   end
-  local disable_ft = nil
-  if vim.fn.has("nvim-0.10") == 1 then
-    disable_ft = { "vimdoc" }
+  local disable_ft = function(_, bufnr)
+    local max_filesize = 100 * 1024 -- 100KB
+    local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(bufnr))
+    if ok and stats and stats.size > max_filesize then
+      return true
+    end
   end
 
   return {
@@ -99,6 +102,9 @@ local treesitter_textobjs = function()
       enable = enable,
       use_virtual_text = true,
       lint_events = { "BufWrite", "CursorHold" },
+      is_supported = function(lang)
+        return lang == "query" and require("nvim-treesitter.parsers").has_parser("query")
+      end,
     },
   }
 end

@@ -12,7 +12,7 @@ return {
       ts.treesitter_textobjs,
       indent = { enable = true },
       endwise = { enable = true },
-      matchup = { enable = true, include_match_words = true },
+      matchup = { enable = true, include_match_words = true, disable_virtual_text = true },
     },
   },
   {
@@ -28,6 +28,9 @@ return {
     config = function(_, opts)
       ts.treesitter_parsers()
       require("nvim-treesitter.configs").setup(opts)
+
+      vim.g.skip_ts_context_commentstring_module = true
+      vim.g.matchup_matchparen_offscreen = { method = "popup" }
     end,
   },
   {
@@ -53,7 +56,11 @@ return {
     "windwp/nvim-ts-autotag",
     event = "LazyFile",
     ft = { "typescriptreact", "javascript", "javascriptreact", "html", "vue", "svelte" },
-    opts = {},
+    opts = {
+      enable_close = true,
+      enable_rename = true,
+      enable_close_on_slash = true,
+    },
   },
   {
     "vidocqh/auto-indent.nvim",
@@ -95,6 +102,24 @@ return {
         local bufnr = vim.api.nvim_get_current_buf()
         require("rainbow-delimiters").toggle(bufnr)
       end, { bar = true, nargs = 0 })
+    end,
+  },
+  {
+    "Wansmer/treesj",
+    -- stylua: ignore
+    keys = {
+      { "<leader>cb", function() require("treesj").toggle() end, desc = "Split/Join Block" },
+    },
+    config = function()
+      local tsj = require("treesj")
+      tsj.setup({
+        use_default_keymaps = false,
+        check_syntax_error = true,
+        max_join_length = 120,
+        cursor_behavior = "hold",
+        notify = true,
+        langs = {},
+      })
     end,
   },
   {

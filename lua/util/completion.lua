@@ -18,7 +18,7 @@ local formatting = {
         luasnip = "(Snippet)",
         snippets = "(Snippet)",
         git = "(Git)",
-        path = "(Path)",
+        async_path = "(Path)",
         emoji = "(Emoji)",
         nvim_lsp = "(Lsp)",
         nvim_lua = "(Lua)",
@@ -74,17 +74,10 @@ local sources = {
   { name = "lazydev", group_index = 0 },
   { name = "nvim_lsp" },
   { name = "nvim_lsp_signature_help" },
+  { name = "async_path" },
   { name = "snippets" },
   { name = "nvim_lua" },
   { name = "treesitter" },
-  {
-    name = "path",
-    option = {
-      get_cwd = function(params)
-        return { vim.fn.expand(("#%d:p:h"):format(params.context.bufnr)), vim.fn.getcwd() }
-      end,
-    },
-  },
   {
     name = "buffer",
     option = {

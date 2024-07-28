@@ -12,6 +12,8 @@ return {
       transparent.setup({
         extra_groups = {
           "NormalFloat",
+          "OctoEditable",
+          "EndOfBuffer",
         },
         exclude_groups = {
           "CursorLine",
