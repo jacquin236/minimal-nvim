@@ -151,10 +151,10 @@ map("n", "<leader>!", "zg", { desc = "Add Word to Dictionary" })
 map("n", "<leader>@", "zug", { desc = "Remove Word from Dictionary" })
 -- Select
 map({ "n", "x" }, "<C-a>", "gg<S-V>G", { desc = "Select All Text", silent = true, noremap = true })
--- Paste
-map("i", "<C-v>", '<C-r>"', { desc = "Paste on Insert Mode", silent = true })
 -- Copy
 map({ "n", "x" }, "<C-c>", ":%y+<cr>", { desc = "Copy Whole Text to Clipboard", silent = true })
+-- Paste
+map("i", "<C-v>", '<C-r>"', { desc = "Paste on Insert Mode", silent = true })
 
 --------------------------------------------- Tab ---------------------------------------------
 map("n", "]<tab>", "<cmd>tabnext<cr>", { desc = "Next Tab" })
