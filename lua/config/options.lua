@@ -5,6 +5,8 @@
 -- Set up variable environment
 vim.g.project_dir = vim.fn.expand("$HOME") .. "/projects"
 
+vim.g.lazyvim_picker = "telescope"
+
 -- Disable builtin providers
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_perl_provider = 0

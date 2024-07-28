@@ -1,6 +1,17 @@
 local norg_func = require("util.neorg")
 local list_workspaces = norg_func.list_workspaces
 
+LazyVim.on_very_lazy(function()
+  vim.api.nvim_create_autocmd("FileType", {
+    group = vim.api.nvim_create_augroup("norg_conceal", { clear = true }),
+    pattern = { "norg" },
+    callback = function()
+      vim.opt_local.conceallevel = 2
+      vim.opt_local.foldlevel = 99
+    end
+  })
+end)
+
 return {
   {
     "nvim-neorg/neorg",
@@ -53,12 +64,12 @@ return {
 
       cmp.setup.filetype("norg", {
         sources = {
-          { name = "neorg", group_index = 1 },
+          { name = "neorg",      group_index = 1 },
           { name = "dictionary", group_index = 1 },
-          { name = "spell", group_index = 1 },
-          { name = "emoji", group_index = 1 },
-          { name = "natdat", group_index = 1 },
-          { name = "buffer", group_index = 2 },
+          { name = "spell",      group_index = 1 },
+          { name = "emoji",      group_index = 1 },
+          { name = "natdat",     group_index = 1 },
+          { name = "buffer",     group_index = 2 },
         },
       })
     end,
