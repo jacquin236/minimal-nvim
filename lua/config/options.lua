@@ -3,7 +3,7 @@
 -- Add any additional options here
 
 -- Set up variable environment
-vim.g.project_dir = vim.env.PROJECT_DIR or vim.fn.expand("$HOME") .. "/projects"
+vim.g.project_dir = vim.fn.expand("$HOME") .. "/projects"
 
 -- Disable builtin providers
 vim.g.loaded_python3_provider = 0
