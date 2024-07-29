@@ -20,10 +20,18 @@ return {
   },
   -- stylua: ignore
   keys = {
-    { "<leader>gnt", "<cmd>Neogit<cr>", desc = "Toggle Neogit" },
-    { "<leader>gns", function() require("neogit").open() end, desc = "Status Buffer" },
-    { "<leader>gnc", function() require("neogit").open({ "commit" }) end, desc = "Commit Buffer" },
+    { "<leader>gnt", "<cmd>Neogit<cr>",                                     desc = "Toggle Neogit" },
+    { "<leader>gns", function() require("neogit").open() end,               desc = "Status Buffer" },
+    { "<leader>gnc", function() require("neogit").open({ "commit" }) end,   desc = "Commit Buffer" },
     { "<leader>gnp", function() require("neogit").popups.pull.create() end, desc = "Pull Popup" },
     { "<leader>gnP", function() require("neogit").popups.push.create() end, desc = "Push Popup" },
+  },
+  {
+    "folke/which-key.nvim",
+    opts = {
+      spec = {
+        { "<leader>gn", group = "Neogit", icon = " " },
+      },
+    },
   },
 }

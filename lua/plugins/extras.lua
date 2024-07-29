@@ -22,4 +22,6 @@ return {
   { import = "lazyvim.plugins.extras.editor.inc-rename" },
   { import = "lazyvim.plugins.extras.editor.overseer" },
   { import = "lazyvim.plugins.extras.editor.refactoring" },
+  -- chezmoi
+  { import = "lazyvim.plugins.extras.util.chezmoi" },
 }

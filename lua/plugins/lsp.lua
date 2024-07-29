@@ -19,7 +19,8 @@ return {
       keys[#keys + 1] = { "<leader>clS", "<cmd>LspStop<cr>", desc = "Stop Lsp" }
       keys[#keys + 1] = { "<leader>clW", function() vim.lsp.buf.remove_workspace_folder() end, desc = "Remove Workspace" }
       keys[#keys + 1] = { "<leader>clw", function() vim.lsp.buf.add_workspace_folder() end, desc = "Add Workspace" }
-      keys[#keys + 1] = { "<leader>clL", function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, desc = "List Workspace" }
+      keys[#keys + 1] = { "<leader>clL", function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, desc =
+      "List Workspace" }
       -- stylua: ignore end
     end,
     ---@class PluginLspOpts
@@ -60,11 +61,7 @@ return {
           end,
         },
         vimls = {},
-        bashls = {
-          settings = {
-            bashIde = { globPattern = vim.env.GLOB_PATTERN or "*@(.sh|.inc|.bash|.zsh|.command)" },
-          },
-        },
+        bashls = {},
         emmet_language_server = {},
         html = {},
         cssmodules_ls = {},
