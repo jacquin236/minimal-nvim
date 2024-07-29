@@ -1,3 +1,21 @@
+LazyVim.on_very_lazy(function()
+  vim.filetype.add({
+    filename = {
+      ["NEOGIT_COMMIT_EDITMSG"] = "NeogitCommitMessage",
+    }
+  })
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "NeogitCommitMessage" },
+    callback = function()
+      vim.opt.list = false
+      vim.opt_local.spell = true
+      vim.schedule(function()
+        vim.api.nvim_set_hl(0, "VirtColumn", { link = "Variable" })
+      end)
+    end
+  })
+end)
+
 return {
   {
     "hrsh7th/nvim-cmp",

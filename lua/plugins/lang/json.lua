@@ -1,3 +1,9 @@
+LazyVim.on_very_lazy(function()
+  vim.filetype.add({
+    filename = { ["launch.json"] = "jsonc" },
+  })
+end)
+
 return {
   {
     "vuki656/package-info.nvim",
@@ -9,13 +15,13 @@ return {
     keys = {
       -- stylua: ignore start
       { "<leader>pjv", function() require("package-info").show({ force = true }) end, desc = "Show Dependencies Versions" },
-      { "<leader>pjV", function() require("package-info").hide() end, desc = "Hide Dependencies Versions" },
-      { "<leader>pju", function() require("package-info").update() end, desc = "Update Package" },
-      { "<leader>pjr", function() require("package-info").delete() end, desc = "Remove Package" },
-      { "<leader>pjc", function() require("package-info").change_version() end, desc = "Change Package Version" },
-      { "<leader>pji", function() require("package-info").install() end, desc = "Install New Dependency" },
-      { "<leader>pjp", function() require("package-info").toggle() end, desc = "Toggle Package-Info" },
-      { "<leader>pjt", "<cmd>Telescope package_info<cr>", desc = "Package Info" },
+      { "<leader>pjV", function() require("package-info").hide() end,                 desc = "Hide Dependencies Versions" },
+      { "<leader>pju", function() require("package-info").update() end,               desc = "Update Package" },
+      { "<leader>pjr", function() require("package-info").delete() end,               desc = "Remove Package" },
+      { "<leader>pjc", function() require("package-info").change_version() end,       desc = "Change Package Version" },
+      { "<leader>pji", function() require("package-info").install() end,              desc = "Install New Dependency" },
+      { "<leader>pjp", function() require("package-info").toggle() end,               desc = "Toggle Package-Info" },
+      { "<leader>pjt", "<cmd>Telescope package_info<cr>",                             desc = "Package Info" },
       -- stylua: ignore end
     },
     config = function()

@@ -1,3 +1,12 @@
+LazyVim.on_very_lazy(function()
+  vim.filetype.add({
+    filename = {
+      Brewfile = "ruby",
+      Podfile = "ruby",
+    }
+  })
+end)
+
 return {
   {
     "weizheheng/ror.nvim",

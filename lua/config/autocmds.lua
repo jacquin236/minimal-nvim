@@ -94,3 +94,30 @@ autocmd("InsertEnter", {
     toggle_trailing("i")
   end,
 })
+
+autocmd("FileType", {
+  pattern = { "lua", "python", "rust" },
+  callback = function()
+    vim.opt_local.spell = true
+  end
+})
+
+autocmd("FileType", {
+  pattern = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+  callback = function()
+    vim.bo.textwidth = 100
+    vim.opt_local.spell = true
+  end
+})
+
+autocmd("FileType", {
+  pattern = { "go" },
+  callback = function()
+    vim.bo.expandtab = false
+    vim.bo.softtabstop = false
+    vim.bo.tabstop = 4
+    vim.bo.shiftwidth = 4
+    vim.bo.textwidth = 120
+    vim.opt_local.spell = true
+  end
+})
