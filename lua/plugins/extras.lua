@@ -17,11 +17,11 @@ return {
   -- util
   { import = "lazyvim.plugins.extras.util.mini-hipatterns" },
   { import = "lazyvim.plugins.extras.util.project" },
-  { import = "lazyvim.plugins.extras.util.dot" },
+  -- { import = "lazyvim.plugins.extras.util.dot" },
   -- editor
   { import = "lazyvim.plugins.extras.editor.inc-rename" },
   { import = "lazyvim.plugins.extras.editor.overseer" },
   { import = "lazyvim.plugins.extras.editor.refactoring" },
   -- chezmoi
-  { import = "lazyvim.plugins.extras.util.chezmoi" },
+  -- { import = "lazyvim.plugins.extras.util.chezmoi" },
 }
