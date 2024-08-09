@@ -102,7 +102,7 @@
   "plenary.nvim": { "branch": "master", "commit": "a3e3bc82a3f95c5ed0d7201546d5d2c19b20d683" },
   "project.nvim": { "branch": "main", "commit": "8c6bad7d22eef1b71144b401c9f74ed01526a4fb" },
   "py-requirements.nvim": { "branch": "main", "commit": "10f55c0fa2d1761455c6a92b2981729b080fc39a" },
-  "rainbow-delimiters.nvim": { "branch": "master", "commit": "254c67c8c69ca71efd84ec2be6d0344ec792cedd" },
+  "rainbow-delimiters.nvim": { "branch": "master", "commit": "97b8238fb6f1dd2b7d4168ee10457c277c9e6ee3" },
   "rainbow_csv": { "branch": "master", "commit": "3dbbfd7d17536aebfb80f571255548495574c32b" },
   "refactoring.nvim": { "branch": "master", "commit": "c406fc5fb4d7ba5fce7b668637075fad6e75e9f8" },
   "ror.nvim": { "branch": "main", "commit": "9d31ad3953be83ac8dd542725ca4881c861f64a5" },
